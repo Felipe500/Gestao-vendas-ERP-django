@@ -70,7 +70,7 @@ class NovoPedido(View):
             data['venda'] = venda
             data['itens'] = itens
 
-            
+
 
         else:
             print("não tem id aqui")
@@ -105,8 +105,13 @@ class NovoPedido(View):
 
 class NovoItemPedido(View):
     def get(self, request, pk):
+        data = {}
+        data_get = {}
 
-        pass
+        data_get['clientes'] = VendaForm(request.POST, request.FILES)
+
+        # data_get['clientes'] = VendaForm(instance=venda)
+        return render(request, 'vendas/novo-pedido.html', data_get)
 
     def post(self, request, venda):
         data = {}
@@ -132,8 +137,8 @@ class NovoItemPedido(View):
             item = ItemsVenda.objects.create(
             produto_id=request.POST['produto_id'], quantidade=request.POST['quantidade'],
             desconto=request.POST['desconto'], venda_id=venda)
-
-
+        venda = Venda.objects.get(id=venda)
+        data['clientes'] = VendaForm( instance=venda)
         data['item'] = item
         data['form_item'] = ItemPedidoForm()
 
@@ -153,11 +158,6 @@ class ListaVendas( LoginRequiredMixin, View):
     def get(self, request):
 
         my_log.debug('Acessaram a listagem de vendas: ')
-        try:
-            1/0
-        except Exception as e:
-            time = datetime.datetime.now()
-            my_log.exception(time.strftime("%m/%d/%Y, %H:%M:%S") + '---' + str(request.user))
 
 
         vendas = Venda.objects.all()
@@ -169,9 +169,6 @@ class EditPedido(View):
     def get(self, request, venda):
         data = {}
         STATUS = VendaStatus
-
-
-
 
         venda = Venda.objects.get(id=venda)
         vendaform = VendaForm(instance=venda or None)
@@ -222,9 +219,9 @@ class DeleteItemPedido(View):
         item_pedido = ItemsVenda.objects.get(id=item)
 
         produto_qted = item_pedido.quantidade
-        produto_estoque = Estoque.objects.get(produto_id=item)
+        produto_estoque = Estoque.objects.get(produto=item_pedido.produto)
 
-        produto_estoque.alterar_estoque(item, produto_qted)
+        produto_estoque.alterar_estoque(item_pedido.produto, produto_qted)
         venda_id = item_pedido.venda.id
         item_pedido.delete()
 
@@ -232,12 +229,17 @@ class DeleteItemPedido(View):
 
 class EditItemPedido(View):
     def get(self, request, item):
+
         item_pedido = ItemsVenda.objects.get(id=item)
         val_item = item_pedido.produto.preco
         form = ItemForm(instance=item_pedido)
 
         return render(
-            request, 'vendas/edit-itempedido.html', {'item_pedido': item_pedido, 'form':form, 'val_item':val_item})
+            request,
+            'vendas/edit-itempedido.html',
+            {'item_pedido': item_pedido,
+            'form':form,
+            'val_item':val_item,})
 
     def post(self, request, item):
 

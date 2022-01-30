@@ -21,6 +21,7 @@ class Estoque(models.Model):
     data_atualizacao = models.DateTimeField(default=now, editable=False)
     vendedor = models.ForeignKey(Funcionario, null=True, blank=True, on_delete=models.CASCADE)
 
+
     def alterar_estoque(self,produto, qted):
         Novo_estoque = Estoque.objects.get(produto_id=produto)
         Novo_estoque.estoque_atual += qted

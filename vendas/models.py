@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import post_save, m2m_changed, pre_save,pre_init, post_init
+from django.db.models.signals import post_save, m2m_changed, pre_save, post_delete
 from django.db.models import Sum, F, FloatField, Max, IntegerField
 from django.dispatch import receiver
 from clientes.models import Cliente
@@ -108,6 +108,10 @@ class ItemsVenda(models.Model):
 #def Alteracao_estoque(sender, instance, **kwargs):
 #    instance.Recupera_Qted_anterior()
 
+
+@receiver(post_delete, sender=ItemsVenda)
+def Atualizar_Itens_Venda_del(sender, instance, **kwargs):
+    instance.venda.calcular_total()
 
 @receiver(post_save, sender=ItemsVenda)
 def Atualizar_Itens_Venda(sender, instance, **kwargs):
