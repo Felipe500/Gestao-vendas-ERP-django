@@ -1,0 +1,18 @@
+
+{% extends 'base.html' %}
+{% block title %} Delete pedido {% endblock %}
+
+{% block main %}
+
+<h2>Deseja realmente cancelar esta venda {{ venda }}?</h2>
+
+<form action="{% url 'delete-pedido' venda.id %}" method="POST">
+    {% csrf_token %}
+    <br>
+    <button type="submit" class="btn btn-danger">Confirmar</button>
+</form>
+
+<br>
+<a class="btn btn-warning" href="{% url 'lista-vendas'  %}" role="button">Cancelar</a>
+
+{% endblock %}

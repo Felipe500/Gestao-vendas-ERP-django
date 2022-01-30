@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %} Administracao {% endblock %}
+
+
+
+    {% block extranavbar %}
+    <div class="nav">
+
+            <div class="col-12">
+                  <form class="form-inline">
+                  <div class="form-group mx-sm-3 mb-2">
+
+                        <input type="text" class="form-control" id="nome" name="nome" placeholder="Digite seu nome">
+                  </div>
+
+                  <div class="form-group mx-sm-3 mb-2">
+
+                        <input type="text" class="form-control" id="sobrenome" name="sobrenome" placeholder="Digite seu sobrenome ">
+                  </div>
+                  <button type="submit" class="btn btn-primary mb-2">Buscar por nome</button>
+                </form>
+            </div>
+        </div>
+    {% endblock %}
+
+
+    {% block main %}
+
+<h3>Listagem de Clientes</h3>
+<HR>
+<a href="{% url 'person_new' %}"><button type="button" class="btn btn-primary">NOVO CLIENTE</button></a>
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Nome completo</th>
+
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+     {% for cliente in clientes %}
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td><a href="{% url 'persons_update' cliente.id %}">{{ cliente.nome_completo|upper }}</a></td>
+
+      <td><a href="{% url 'persons_delete' cliente.id %}" class="trash-item">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a></td>
+    </tr>
+    {% empty %}
+    <li>Desculpe, nao existem clientes cadastrados</li>
+{% endfor %}
+  </tbody>
+</table>
+
+
+{% if cliente|length >= 20 %}
+   Voce ja tem mais que 20 clientes
+{% endif %}
+
+{% endblock %}
+
+{% block footer %}
+    {% include 'footer.html' %}
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+
+{% block title %} Administracao {% endblock %}
+
+{% block main %}
+
+
+<h3>Estoque de produtos</h3>
+<a href="{% url 'Produto_Novo' %}"><button type="button" class="btn btn-primary">NOVO PRODUTO</button></a>
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Produto</th>
+        <th scope="col">Estoque_atual</th>
+        <th scope="col">Estoque_minimo</th>
+
+    </tr>
+  </thead>
+{% for produto in produtos %}
+  <tbody>
+    <tr style="text-align: center">
+
+      <td><a href="{% url 'produto_update' produto.id %}">{{ produto.id }}</a></td>
+
+      <td><a href="{% url 'produto_update' produto.id %}">{{ produto.descricao|upper }}</a></td>
+
+        <td><a href="{% url 'produto_update' produto.id %}">{{ produto.qted }}</a></td>
+      <td><a href="{% url 'Produto_Delete' produto.id %}" style="text-align: center" class="trash-item">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a></td>
+         {% empty %}
+    <li>Desculpe, nao existem clientes cadastrados</li>
+{% endfor %}
+    </tr>
+
+  </tbody>
+</table>
+
+
+{% endblock %}

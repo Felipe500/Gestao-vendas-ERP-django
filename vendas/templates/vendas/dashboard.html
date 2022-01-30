@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<h1>DASHBOARD</h1>
+<ul>
+    <li>Media de vendas - &nbsp;{{ media }}</li>
+    <li>Menor de desconto - &nbsp;{{ media_desc }}</li>
+    <li>Maior venda - &nbsp;{{ min }}</li>
+     <li>Menor de vendas - &nbsp;{{ max }}</li>
+    <li>Número de pedidos - &nbsp;{{ n_ped }}</li>
+    <li>Número de pedidos com NF-E - &nbsp;{{ n_ped_nfe }}</li>
+</ul>
+{% endblock %}

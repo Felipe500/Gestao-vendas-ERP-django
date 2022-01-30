@@ -1,0 +1,46 @@
+{% extends "account/base.html" %}
+
+
+{% load i18n %}
+{% load static %}
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+{% endblock %}
+
+
+
+{% block content %}
+
+	<div class="main">
+		<input type="checkbox" id="chk" aria-hidden="true">
+            <br>
+			<div class="signup">
+
+				<form method="post">
+					  {% csrf_token %}
+                    {% if process == "connect" %}
+                  <label for="chk" aria-hidden="true">{% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}</label>
+
+					 <p>{% blocktrans with provider.name as provider %}You are about to connect a new third party account from {{ provider }}.{% endblocktrans %}</p>
+                      {% else %}
+                      <h1 style="color:white;font-size:28px; text-align: center;">{% blocktrans with provider.name as provider %}Logar via {{ provider }}{% endblocktrans %}</h1>
+
+                      <p style="color:white;font-size:17px; text-align: center;">{% blocktrans with provider.name as provider %}Você está prestes a entrar usando uma conta de terceiros do {{ provider }}.{% endblocktrans %}</p>
+                      {% endif %}
+                      <button type="submit">{% trans "Continue" %}</button>
+
+				</form>
+                <br>
+              <hr style="color:green">
+               <a  href="{% url 'account_login' %} "><button type="submit" >Logar</button></a>
+                <a href="{% url 'account_signup' %}"><button type="submit" >Registrar</button></a>
+
+			</div>
+
+
+			<div class="login1">
+
+			</div>
+	</div>
+
+{% endblock %}

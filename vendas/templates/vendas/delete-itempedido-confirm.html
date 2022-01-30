@@ -1,0 +1,30 @@
+
+
+
+{% extends 'base.html' %}
+
+
+{% block title %} Confirmacao {% endblock %}
+
+{% block main %}
+
+<h2>Deseja realmente remover esse item: {{ item_pedido }}?</h2>
+
+<form action="{% url 'delete-item-pedido' item_pedido.id %}" method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Confirmar</button>
+</form>
+
+<br>
+<a class="btn btn-warning" href="{% url 'lista-vendas'  %}" role="button">Cancelar</a>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+

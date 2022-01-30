@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block main %}
+
+<h2>Editando item: {{ item_pedido }} - R$ {{ val_item}}</h2>
+<br>
+
+<form  method="POST">
+    {% csrf_token %}
+    {{ form|bootstrap }}
+    <button type="submit">Confirmar</button>
+</form>
+
+{% endblock %}

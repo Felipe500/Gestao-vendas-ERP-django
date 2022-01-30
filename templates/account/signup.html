@@ -1,0 +1,43 @@
+
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% load static %}
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+{% endblock %}
+
+{% block main %}
+ <div class="body-s">
+
+	<div class="main">
+		<input type="checkbox" id="chk" aria-hidden="true">
+            <br>
+			<div class="signup">
+				<form  method="post" action="{% url 'account_signup' %}">
+					  {% csrf_token %}
+						<label for="chk" aria-hidden="true">Registrar conta</label>
+
+
+					  	{{ form.as_p }}
+
+					  {% if redirect_field_value %}
+					  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+					  {% endif %}
+					  <button type="submit">{% trans "Sign Up" %} &raquo;</button>
+					<p style="color:white;justify-content: center;display: flex;">{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+
+				</form>
+			</div>
+
+
+			<div class="login1">
+
+			</div>
+	</div>
+ </div>
+
+{% endblock %}
