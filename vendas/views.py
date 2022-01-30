@@ -70,6 +70,8 @@ class NovoPedido(View):
             data['venda'] = venda
             data['itens'] = itens
 
+            
+
         else:
             print("não tem id aqui")
            # venda = Venda.objects.get(id=data['venda_id'])
@@ -77,10 +79,17 @@ class NovoPedido(View):
 
             #value = request.POST.get('')
             if vendaform.is_valid():
-                print(vendaform.cleaned_data['cliente_id'])
-                form = vendaform.save(commit=False)
 
-                form = form.save()
+
+
+                print(vendaform.cleaned_data.get('cliente_id'))
+                form = vendaform.save()
+                print('venda ',form.pk,' criada com sucesso!')
+                venda = Venda.objects.get(id=form.pk)
+                itens = venda.itemsvenda_set.all()
+                data['venda'] = venda
+                data['itens'] = itens
+
                 #idd =form.fields['id']
                 #print(idd)
 
