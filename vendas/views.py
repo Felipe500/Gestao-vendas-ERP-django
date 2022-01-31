@@ -229,7 +229,7 @@ class DeleteItemPedido(View):
 
 class EditItemPedido(View):
     def get(self, request, item):
-
+        print(item)
         item_pedido = ItemsVenda.objects.get(id=item)
         val_item = item_pedido.produto.preco
         form = ItemForm(instance=item_pedido)

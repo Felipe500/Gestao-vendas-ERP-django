@@ -14,6 +14,12 @@ class ItemForm(forms.ModelForm):
         model = ItemsVenda
         fields = ['quantidade','desconto']
 
+        widgets = {
+
+            'quantidade': forms.NumberInput(attrs={"class": "form-control", 'name': 'cliente'}),
+            'desconto': forms.NumberInput(attrs={"class": "form-control", 'name': 'desconto'})
+        }
+
 class VendaForm(forms.ModelForm):
    # cliente = forms.ModelChoiceField()
     #cliente = forms.ModelChoiceField(label='Cliente',
