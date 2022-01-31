@@ -7,7 +7,7 @@ class ProdutoAdmin(admin.ModelAdmin):
 
     #autocomplete_fields = ("pessoa",)
 
-    list_display = ('id', 'descricao', 'preco', 'qted')
+    list_display = ('id', 'descricao', 'preco')
     #search_fields = ('id', 'pessoa__first_name', 'pessoa__doc__num_doc')
 
 class EstoqueAdmin(admin.ModelAdmin):

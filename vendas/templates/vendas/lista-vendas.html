@@ -4,11 +4,15 @@
 {% block main %}
     <h2>Listagem de vendas</h2>
     <h5 style="color:green">TOTAL: {{count_vendas}} vend{{count_vendas|pluralize:"a,as"}} </h5>
-    <table class="table">
+
+<a href="{% url 'novo-pedido' %}"><button type="button" class="btn btn-primary">Nova venda</button></a>
+
+<hr>
+<table class="table">
       <thead>
         <tr>
           <th scope="col">ID</th>
-          <th scope="col">Numero</th>
+
           <th scope="col">Desconto</th>
           <th scope="col">Valor</th>
           <th scope="col">Editar</th>
@@ -18,7 +22,7 @@
         {% for venda in vendas %}
             <tr>
                 <td>{{ venda.id }}</td>
-                <td>{{ venda.numero }}</td>
+
                 <td>{{ venda.desconto }}</td>
                 <td>{{ venda.valor }}</td>
                 <td>
@@ -36,6 +40,5 @@
       </tbody>
     </table>
 
-<a href="{% url 'novo-pedido' %}"><button type="button" class="btn btn-primary">Nova venda</button></a>
 
 {% endblock %}

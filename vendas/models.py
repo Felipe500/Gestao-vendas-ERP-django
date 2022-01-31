@@ -1,13 +1,14 @@
 from django.db import models
-from django.db.models.signals import post_save, m2m_changed, pre_save, post_delete
+from django.db.models.signals import post_save, m2m_changed, pre_save, post_delete,pre_delete
 from django.db.models import Sum, F, FloatField, Max, IntegerField
 from django.dispatch import receiver
 from clientes.models import Cliente
 from produtos.models import Produto, Estoque
-from funcionarios.models import Funcionario
 from .managers import VendaManager
 from django.contrib.auth import get_user_model
+
 User = get_user_model()
+
 
 class VendaStatus(models.TextChoices):
 
@@ -18,7 +19,19 @@ class VendaStatus(models.TextChoices):
 
 
 
+
 class Venda(models.Model):
+    ABERTA = 'Aberta'
+    FECHADA = 'Fechada'
+    ORCAMENTO = 'Orçamento'
+    DESCONHECIDO = 'Desconhecido'
+
+    STATUS = (
+        (ABERTA, ('Aguardando pagamento')),
+        (ORCAMENTO, ('Em Orçamento')),
+        (FECHADA, ('Pago')),
+        (4, ('Cancelado')),
+    )
 
     valor = models.DecimalField(max_digits=5, decimal_places=2,  null=True, blank=True, default=0)
     desconto = models.DecimalField(max_digits=5, decimal_places=2, default=0)
@@ -26,6 +39,7 @@ class Venda(models.Model):
     cliente = models.ForeignKey(Cliente, null=True, blank=True, on_delete=models.CASCADE)
     vendedor = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     nfe_emitida = models.BooleanField(default=False)
+    #Cancelado = models.BooleanField(default=False)
     status = models.CharField(
         choices=VendaStatus.choices,
         default=VendaStatus.DESCONHECIDO,
@@ -47,13 +61,16 @@ class Venda(models.Model):
         tot = tot - float(self.impostos) - float(self.desconto)
         self.valor = tot
         Venda.objects.filter(id=self.id).update(valor=tot)
-        #tot = 0
-        #for produto in self.produtos.all():
-            #tot += produto.preco
-        #return (tot - self.desconto) - self.impostos
+
+    def Reposicao_Estoque(self):
+        itens = self.itemsvenda_set.all()
+        for item in itens:
+            print(item.quantidade)
+
 
     def __str__(self):
         return str(self.pk) + '- venda'
+
 
 class ItemsVenda(models.Model):
     Qted_anterior = 0
@@ -65,12 +82,14 @@ class ItemsVenda(models.Model):
         verbose_name_plural = "Itens do pedido"
         unique_together = [['venda', 'produto']]
 
-
-
     def save(self, *args, **kwargs):
-        print('anterior qted: ', str(self.quantidade))
+        print('anterior qted: ', str(self.produto.pk))
+        if Estoque.objects.filter(produto_id=self.produto.pk).exists():
+            print("produto já criado no estoque...")
+        else:
+            Produto_Estoque = Estoque(produto=self.produto.pk, estoque_atual=0)
+            Produto_Estoque.save()
         super(ItemsVenda, self).save(*args, **kwargs)
-
 
     def alterar_estoque(self):
         produto_estoque = Estoque.objects.get(produto=self.produto)
@@ -82,31 +101,11 @@ class ItemsVenda(models.Model):
         print('data: ',self.Qted_anterior)
         print("data 2: ",Qted_estoque)
 
-    def dados_anteriores(self):
-        #print('produto q: ',self.produto.qted)
-        #print(self.produto)
-        #print('atual qted produto: ',self.quantidade)
-        #self.produto.qted += 1
-        #('antes estoque alterado--------------------------')
-        #self.produto.save()
-        pass
-
-    def Recupera_Qted_anterior(self):
-        #print(self.Qted_anterior)
-        if self.Qted_anterior != self.quantidade:
-            self.Qted_anterior = self.quantidade
-            print(self.Qted_anterior)
-
-
 
     def __str__(self):
         return str(self.venda) + ' - ' + self.produto.descricao
 
 
-
-#@receiver(post_init, sender=ItemsVenda)
-#def Alteracao_estoque(sender, instance, **kwargs):
-#    instance.Recupera_Qted_anterior()
 
 
 @receiver(post_delete, sender=ItemsVenda)
@@ -117,7 +116,11 @@ def Atualizar_Itens_Venda_del(sender, instance, **kwargs):
 def Atualizar_Itens_Venda(sender, instance, **kwargs):
     instance.venda.calcular_total()
 
-    
+
+
+@receiver(post_delete, sender=Venda)
+def Alterar_estoque(sender, instance, **kwargs):
+    instance.Reposicao_Estoque()
 
 @receiver(post_save, sender=Venda)
 def Atualizar_Venda(sender, instance, **kwargs):

@@ -72,15 +72,12 @@ class NovoPedido(View):
 
 
 
+
+
         else:
             print("não tem id aqui")
-           # venda = Venda.objects.get(id=data['venda_id'])
 
-
-            #value = request.POST.get('')
             if vendaform.is_valid():
-
-
 
                 print(vendaform.cleaned_data.get('cliente_id'))
                 form = vendaform.save()
@@ -89,16 +86,6 @@ class NovoPedido(View):
                 itens = venda.itemsvenda_set.all()
                 data['venda'] = venda
                 data['itens'] = itens
-
-                #idd =form.fields['id']
-                #print(idd)
-
-            #itens = venda.itemsvenda_set.all()
-            #data['venda'] = venda
-            #data['itens'] = itens
-
-        #print(data['clientes'].field('pk'))
-
 
         return render(
             request, 'vendas/novo-pedido.html', data)
@@ -121,22 +108,21 @@ class NovoItemPedido(View):
             data['mensagem'] = 'Item já incluso no pedido, por favor edite!'
             item = item[0]
         else:
+            print(item)
             data['mensagem'] = ''
-            id_produto = int(request.POST['produto_id'])
-            produto = Produto.objects.get(id=id_produto)
-            Qted_estoque = produto.qted - id_produto
+            produto_qted = -int(request.POST['quantidade'])
 
-            produto.qted -= int(request.POST['quantidade'])
-            produto.save()
+            id_produto = int(request.POST['produto_id'])
 
             produto_estoque = Estoque.objects.get(produto_id=id_produto)
 
-            produto_estoque.alterar_estoque(id_produto, Qted_estoque)
+            produto_estoque.alterar_estoque(id_produto, produto_qted)
 
             #Produto.objects.filter(id=request.POST['produto_id']).update(field=F('qted') + request.POST['quantidade'])
             item = ItemsVenda.objects.create(
             produto_id=request.POST['produto_id'], quantidade=request.POST['quantidade'],
             desconto=request.POST['desconto'], venda_id=venda)
+
         venda = Venda.objects.get(id=venda)
         data['clientes'] = VendaForm( instance=venda)
         data['item'] = item
@@ -180,15 +166,7 @@ class EditPedido(View):
         data['venda'] = venda
         print(venda.id)
         data['itens'] = venda.itemsvenda_set.all()
-
-        if venda.status == 'DC':
-            data['status'] = STATUS.DESCONHECIDO.label
-        elif venda.status == 'PR':
-            data['status'] = STATUS.PROCESSANDO.label
-        elif venda.status == 'AB':
-            data['status'] = STATUS.ABERTA.label
-        elif venda.status == 'FE':
-            data['status'] = STATUS.FECHADA.label
+        #print(venda.status.VendaStatus)
 
         return render(
             request, 'vendas/novo-pedido.html', data)
@@ -202,6 +180,18 @@ class DeletePedido(View):
 
     def post(self, request, venda):
         venda = Venda.objects.get(id=venda)
+
+        itens_venda = venda.itemsvenda_set.all()
+        for item in itens_venda:
+            #item_pedido = ItemsVenda.objects.get(id=item)
+
+            produto_pedido = Produto.objects.get(id=item.produto.pk)
+            produto_estoque = Estoque.objects.get(produto=item.produto.pk)
+            Qted_estoque = int(item.quantidade)
+
+            print(produto_estoque.produto.pk)
+            produto_estoque.alterar_estoque(item.produto.pk, Qted_estoque)
+
         venda.delete()
         return redirect('lista-vendas')
 

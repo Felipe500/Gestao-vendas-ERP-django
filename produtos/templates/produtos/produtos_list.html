@@ -14,7 +14,6 @@
       <th scope="col">ID</th>
       <th scope="col">Descrição</th>
         <th scope="col">Preço</th>
-        <th scope="col">Qted</th>
       <th scope="col">Delete</th>
     </tr>
   </thead>
@@ -26,7 +25,6 @@
 
       <td><a href="{% url 'produto_update' produto.id %}">{{ produto.descricao|upper }}</a></td>
         <td><a href="{% url 'produto_update' produto.id %}">{{ produto.preco|upper }}</a></td>
-        <td><a href="{% url 'produto_update' produto.id %}">{{ produto.qted }}</a></td>
       <td><a href="{% url 'Produto_Delete' produto.id %}" class="trash-item">
                             <i class="fa fa-trash" aria-hidden="true"></i>
                         </a></td>
