@@ -15,7 +15,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['sistema-django22.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['gestao-vendas-crm.herokuapp.com', 'localhost']
 
 ADMINS = [('felipe', 'felipe.brx.dev@gmail.com'),]
 # Application definition
