@@ -1,4 +1,6 @@
 import datetime
+
+from django.core import serializers
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
@@ -8,20 +10,16 @@ from django.views import View
 from produtos.models import Produto, Estoque
 from .models import Venda, ItemsVenda,  VendaStatus
 from django.db.models import  Sum, F, FloatField,Min, Max, Avg
-from .forms import VendaForm, ItemPedidoForm,ItemForm
+from .forms import VendaForm, ItemPedidoForm,ItemForm, ProdutoAddForm,ProdutoCategoriaForm
 import logging
+from produtos.models import Categoria, Produto
 
 
 my_log = logging.getLogger('django')
 
 
 class DashboardView(LoginRequiredMixin,View):
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.has_perm('vendas.ver_dashboard'):
 
-            return HttpResponse('Acesso negado, voce precisa de permissao!')
-
-        return super(DashboardView, self).dispatch(request, *args, **kwargs)
     def get(self, request):
         data = {}
         data['media'] = Venda.objects.media()
@@ -41,7 +39,8 @@ class NovoPedido(View):
         data_get = {}
 
         data_get['clientes'] = VendaForm(request.POST, request.FILES)
-
+        data_get['form_produto'] = ProdutoAddForm()
+        data_get['ProdutoCategoriaForm'] = ProdutoCategoriaForm()
         #data_get['clientes'] = VendaForm(instance=venda)
         return render(request, 'vendas/novo-pedido.html',data_get)
 
@@ -50,12 +49,20 @@ class NovoPedido(View):
         data = {}
 
         data['form_item'] = ItemPedidoForm()
+        data['form_produto'] = ProdutoAddForm()
+        data['ProdutoCategoriaForm'] = ProdutoCategoriaForm()
+
         vendaform = VendaForm(request.POST or None)
 
         data['cliente']= request.POST['cliente']
         data['venda_id'] = request.POST['venda_id']
         data['clientes'] = vendaform
 
+        produtoform = ProdutoAddForm(request.POST)
+        if produtoform.is_valid():
+            print("form valido")
+        else:
+            print("form invalido")
 
         if data['venda_id']:
             print("tem id aqui")
@@ -70,17 +77,15 @@ class NovoPedido(View):
             data['venda'] = venda
             data['itens'] = itens
 
-
-
-
-
         else:
             print("não tem id aqui")
 
             if vendaform.is_valid():
 
                 print(vendaform.cleaned_data.get('cliente_id'))
-                form = vendaform.save()
+                form = vendaform.save(commit=False)
+                form.vendedor = request.user
+                form.save()
                 print('venda ',form.pk,' criada com sucesso!')
                 venda = Venda.objects.get(id=form.pk)
                 itens = venda.itemsvenda_set.all()
@@ -96,37 +101,45 @@ class NovoItemPedido(View):
         data_get = {}
 
         data_get['clientes'] = VendaForm(request.POST, request.FILES)
-
+        data_get['form_produto'] = ProdutoAddForm()
+        data_get['ProdutoCategoriaForm'] = ProdutoCategoriaForm()
         # data_get['clientes'] = VendaForm(instance=venda)
         return render(request, 'vendas/novo-pedido.html', data_get)
 
     def post(self, request, venda):
         data = {}
-        item = ItemsVenda.objects.filter(produto_id=request.POST['produto_id'], venda_id=venda)
+        item = ItemsVenda.objects.filter(produto_id=request.POST['produto_list'], venda_id=venda)
 
+        produtoform = ProdutoAddForm(request.POST)
+
+
+        #verificar item
         if item:
+            print(request.POST['produto_list'])
             data['mensagem'] = 'Item já incluso no pedido, por favor edite!'
             item = item[0]
         else:
             print(item)
+            print(request.POST['produto_list'])
             data['mensagem'] = ''
             produto_qted = -int(request.POST['quantidade'])
 
-            id_produto = int(request.POST['produto_id'])
+            id_produto = int(request.POST['produto_list'])
 
             produto_estoque = Estoque.objects.get(produto_id=id_produto)
 
             produto_estoque.alterar_estoque(id_produto, produto_qted)
-
             #Produto.objects.filter(id=request.POST['produto_id']).update(field=F('qted') + request.POST['quantidade'])
             item = ItemsVenda.objects.create(
-            produto_id=request.POST['produto_id'], quantidade=request.POST['quantidade'],
+            produto_id=request.POST['produto_list'], quantidade=request.POST['quantidade'],
             desconto=request.POST['desconto'], venda_id=venda)
 
         venda = Venda.objects.get(id=venda)
         data['clientes'] = VendaForm( instance=venda)
         data['item'] = item
         data['form_item'] = ItemPedidoForm()
+        data['form_produto'] = ProdutoAddForm()
+        data['ProdutoCategoriaForm'] = ProdutoCategoriaForm()
 
         data['desconto'] = item.venda.desconto
         data['venda'] = item.venda
@@ -159,6 +172,8 @@ class EditPedido(View):
         venda = Venda.objects.get(id=venda)
         vendaform = VendaForm(instance=venda or None)
         data['clientes'] = vendaform
+        data['form_produto'] = ProdutoAddForm()
+        data['ProdutoCategoriaForm'] = ProdutoCategoriaForm()
         #form = ClienteForm(instance=cliente OR None)
         data['form_item'] = ItemPedidoForm()
 
@@ -219,17 +234,20 @@ class DeleteItemPedido(View):
 
 class EditItemPedido(View):
     def get(self, request, item):
+        data_get = {}
         print(item)
         item_pedido = ItemsVenda.objects.get(id=item)
         val_item = item_pedido.produto.preco
         form = ItemForm(instance=item_pedido)
-
+        data_get['form_produto'] = ProdutoAddForm()
+        data_get['ProdutoCategoriaForm'] = ProdutoCategoriaForm()
+        data_get['item_pedido']: item_pedido
+        data_get['form'] = form
+        data_get['val_item'] =  val_item
         return render(
             request,
             'vendas/edit-itempedido.html',
-            {'item_pedido': item_pedido,
-            'form':form,
-            'val_item':val_item,})
+            data_get)
 
     def post(self, request, item):
 
@@ -260,3 +278,10 @@ class EditItemPedido(View):
         venda_id = item_pedido.venda.id
 
         return redirect('edit-pedido', venda=venda_id)
+
+def filtra_produtos(request):
+    id_categoria = request.GET['outro_param']
+    categoria = Categoria.objects.get(id=id_categoria)
+
+    qs_json = serializers.serialize('json', categoria.produto_set.all())
+    return HttpResponse(qs_json, content_type='application/json')

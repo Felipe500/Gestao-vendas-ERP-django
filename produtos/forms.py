@@ -1,13 +1,21 @@
-from django.forms import ModelForm
+from django import forms
 from .models import Produto, Estoque
 
 
-class ProdutoForm(ModelForm):
+class ProdutoForm(forms.ModelForm):
     class Meta:
         model = Produto
         fields = '__all__'
 
-class EstoqueForm(ModelForm):
+        widgets = {
+
+            'categoria': forms.Select(attrs={"class": "select", 'name': 'categoria'}),}
+
+
+
+
+class EstoqueForm(forms.ModelForm):
     class Meta:
         model = Estoque
         fields = ['produto','estoque_atual','estoque_minimo']
+

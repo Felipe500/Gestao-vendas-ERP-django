@@ -26,4 +26,4 @@ class Funcionario(models.Model):
         return self.nome + ' ' + self.sobrenome
 
     def __str__(self):
-        return self.nome + '-' + self.sobrenome
+        return self.nome + ' - ' + self.sobrenome

@@ -4,22 +4,34 @@ from django.db import models
 from funcionarios.models import Funcionario
 from django.db.models.signals import post_save, m2m_changed, pre_save, post_delete,pre_delete
 from django.dispatch import receiver
+from django.urls import reverse
+
+
+
+class Categoria(models.Model):
+    nome = models.CharField(max_length=120)
+
+    def __str__(self):
+        return self.nome
 
 
 class Produto(models.Model):
     descricao = models.CharField(max_length=100)
     preco = models.DecimalField(max_digits=5, decimal_places=2)
+    categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
     data_cadastro = models.DateTimeField(auto_now_add=True, null=True)
 
     def save(self, *args, **kwargs):
-        print('ID DO PRODUTO: ', str(self.pk))
-        if Estoque.objects.filter(produto_id=self).exists():
+        print('USUARIO CRIADO COM SUCESSO', str(self.pk))
+        if Estoque.objects.filter(produto_id=self.pk).exists():
             print("produto já criado no estoque...")
         else:
-            Produto_Estoque = Estoque(produto=self, estoque_atual=0)
+            Produto_Estoque = Estoque(produto_id=self.pk, estoque_atual=0)
             Produto_Estoque.save()
-
         super(Produto, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('produto_list')
 
     def __str__(self):
         return self.descricao

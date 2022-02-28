@@ -148,7 +148,7 @@ USE_TZ = True
 
 LOGIN_URL = '/login/'
 
-LOGIN_REDIRECT_URL = 'person_list'
+LOGIN_REDIRECT_URL = 'register'
 
 
 
@@ -160,6 +160,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     'statics',
+
 ]
 
 STATIC_URL = '/static/'

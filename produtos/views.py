@@ -1,14 +1,27 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Produto, Estoque
 from .forms import ProdutoForm,EstoqueForm
+from django.views.generic import ListView, UpdateView
 
 
 
-@login_required
-def produtos_list(request):
-    produtos = Produto.objects.using('default').all()
-    return render(request, 'produtos/produtos_list.html', {'produtos': produtos})
+
+
+
+class ProdutosUpdate(LoginRequiredMixin,UpdateView):
+
+    def get_object(self, **kwargs):
+        print(kwargs)
+        return Produto.objects.get(id=self.kwargs['id'])
+
+    def get_form_class(self):
+        return ProdutoForm
+
+class ProdutosList(LoginRequiredMixin,ListView):
+    model = Produto
+    fields = '__all__'
 
 
 def Produto_update(request, id):

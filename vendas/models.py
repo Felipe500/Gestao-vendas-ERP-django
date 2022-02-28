@@ -10,6 +10,10 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+
+
+
+
 class VendaStatus(models.TextChoices):
 
     ABERTA = 'AB', 'Aberta'
@@ -54,6 +58,9 @@ class Venda(models.Model):
             ('permissao3', 'Permissao 3'),
         )
 
+    def save(self, *args, **kwargs):
+        super(Venda, self).save(*args, **kwargs)
+
     def calcular_total(self):
         tot = self.itemsvenda_set.all().aggregate(
             tot_ped=Sum((F('quantidade') * F('produto__preco')) - F('desconto'), output_field=FloatField())
@@ -83,7 +90,7 @@ class ItemsVenda(models.Model):
         unique_together = [['venda', 'produto']]
 
     def save(self, *args, **kwargs):
-        print('anterior qted: ', str(self.produto.pk))
+        print('USUARIO CRIADO COM SUCESSO', str(self.produto.pk))
         if Estoque.objects.filter(produto_id=self.produto.pk).exists():
             print("produto já criado no estoque...")
         else:

@@ -9,13 +9,14 @@ def funcionario_profile(sender, instance, created, **kwargs):
     if created:
         if not Group.objects.filter(name='funcionario').exists():
             print("criado grupo funcionario")
-            Group.objects.create(nome='funcionario')
+            Group.objects.create(name='funcionario')
 
         group = Group.objects.get(name='funcionario')
         instance.groups.add(group)
         Funcionario.objects.create(
             user=instance,
             nome=instance.username,
+            sobrenome='*',
         )
         print('perfil criado com sucesso!')
 

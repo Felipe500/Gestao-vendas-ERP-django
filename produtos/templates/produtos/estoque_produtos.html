@@ -15,7 +15,7 @@
       <th scope="col">Estoque Atual</th>
         <th scope="col">Estoque Minimo</th>
         <th scope="col">Ultima Alteração</th>
-      <th scope="col">Delete</th>
+
     </tr>
   </thead>
 {% for produto in produto_estoque %}
@@ -27,9 +27,7 @@
       <td><a href="{% url 'editar_estoque' produto.id %}">{{ produto.estoque_atual }}</a></td>
         <td><a href="{% url 'editar_estoque' produto.id %}">{{ produto.estoque_minimo }}</a></td>
         <td><a href="{% url 'editar_estoque' produto.id %}">{{ produto.data_atualizacao }}</a></td>
-      <td><a href="{% url 'Produto_Delete' produto.id %}" style="text-align: center" class="trash-item">
-                            <i style="text-align: center" class="fa fa-trash" aria-hidden="true"></i>
-                        </a></td>
+
          {% empty %}
     <li>Desculpe, nao existem clientes cadastrados</li>
 {% endfor %}

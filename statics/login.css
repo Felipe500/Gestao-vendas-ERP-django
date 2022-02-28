@@ -64,7 +64,7 @@ background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);
 }
 
 .container{
-	max-width: 600px;
+	max-width:900px;
 	margin: 0 auto;
 	padding: 80px 0;
 	height: 400px;

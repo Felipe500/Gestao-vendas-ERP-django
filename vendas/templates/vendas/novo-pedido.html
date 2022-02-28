@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load bootstrap %}
-
+{% load static %}
 {% block main %}
 
 <div class="row">
@@ -50,14 +50,16 @@
         <br>
     </div>
 </div>
-{% endblock %}
 
-{% block extra %}
 
 {% if venda %}
     {% if mensagem %}
     <h3>{{ mensagem }}</h3>
     {% endif %}
+
+
+    {{ProdutoCategoriaForm}}
+
     <form action="{% url 'novo-item-pedido' venda.id %}" method="POST">
         {% csrf_token %}
         {{ form_item|bootstrap }}
@@ -95,5 +97,17 @@
       </tbody>
     </table>
 {% endif %}
+{% endblock %}
 
+{% block extra %}
+{% endblock %}
+
+
+
+
+
+{% block staticfiles %}
+    <script src="{% static 'js/jquery-ajax.js' %}"></script>
+
+    <script src="{% static 'js/funcoes.js' %}"></script>
 {% endblock %}

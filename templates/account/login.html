@@ -19,11 +19,7 @@
 					 {% csrf_token %}
 					<label for="chk" aria-hidden="true">Login</label>
 
-					{{ form.login }}
-					{{ form.password }}
-					<p style="text-decoration: none;margin: 20px auto;justify-content: center;display: flex;" >{{ form.remember.label }}</p>
-					{{ form.remember }}
-
+					{{ form.as_p }}
 
 					  {% if redirect_field_value %}
 					  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
@@ -42,33 +38,14 @@
 
 
 				  </ul>
-					{% get_providers as socialaccount_providers %}
-
-	{% if socialaccount_providers %}
 
 
-		<div class="socialaccount_ballot">
-			<li style="color:white">Logar com:</li>
-		  <ul class="socialaccount_providers">
-			{% include "socialaccount/snippets/provider_list.html" with process="login" %}
-		  </ul>
 
-		  <div class="login-or">{% trans 'or' %}</div>
 
-		</div>
-
-		{% include "socialaccount/snippets/login_extra.html" %}
-
-		{% else %}
-		<p>{% blocktrans %}If you have not created an account yet, then please
-		<a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
-		{% endif %}
-
-		</div>
-	</div>
 				</form>
 			</div>
-
+	</div>
+	</div>
 
 	<div class="login">
 

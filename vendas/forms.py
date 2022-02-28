@@ -1,11 +1,30 @@
 from django import forms
 from .models import ItemsVenda, Venda
 from clientes.models import Cliente
+from produtos.models import Produto, Categoria
+
+
+class ProdutoCategoriaForm(forms.Form):
+    categoria_list = forms.ModelChoiceField(queryset=Categoria.objects.all(),empty_label=None, label='CATEGORIA', widget=forms.Select(
+        attrs={"class": "select form-control",
+               'name': 'produto_list',
+               'onchange': "filtraFuncionarios(this.value)"}
+    ))
 
 class ItemPedidoForm(forms.Form):
-    produto_id = forms.CharField(label='ID do Produto', max_length=100)
-    quantidade = forms.IntegerField(label='Quantidade')
-    desconto = forms.DecimalField(label='Desconto', max_digits=7, decimal_places=2)
+    produto_list = forms.ModelChoiceField(queryset=Produto.objects.all(), empty_label=None,label='Produtos',
+        required=False,widget=forms.Select(
+        attrs={"class": "select form-control",
+               'name': 'cliente',
+             }
+    ))
+
+    quantidade = forms.IntegerField(label='Quantidade', initial=0)
+    desconto = forms.DecimalField(label='Desconto', max_digits=7, decimal_places=2, initial=0)
+
+
+
+
 
 
 class ItemForm(forms.ModelForm):
@@ -19,6 +38,19 @@ class ItemForm(forms.ModelForm):
             'quantidade': forms.NumberInput(attrs={"class": "form-control", 'name': 'cliente'}),
             'desconto': forms.NumberInput(attrs={"class": "form-control", 'name': 'desconto'})
         }
+
+
+class ProdutoAddForm(forms.ModelForm):
+    #--------------------------------------
+    class Meta:
+        model = ItemsVenda
+        fields = ['produto']
+        widgets = {
+            'produto': forms.Select(attrs={"class": "select form-control",
+                                           'name': 'produto_list',
+                                          }),
+        }
+
 
 class VendaForm(forms.ModelForm):
    # cliente = forms.ModelChoiceField()

@@ -65,7 +65,7 @@ def persons_update(request, id):
     return render(request, 'cliente_form.html', {'form': form})
 
 
-@login_required
+
 def persons_delete(request, id):
     cliente = Cliente.objects.using('default').get(id=id)
 

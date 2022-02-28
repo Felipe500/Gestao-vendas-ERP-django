@@ -6,28 +6,28 @@
 {% block main %}
 
 
-<h3>Estoque de produtos</h3>
+<h3>Listagem de produtos</h3>
 <a href="{% url 'Produto_Novo' %}"><button type="button" class="btn btn-primary">NOVO PRODUTO</button></a>
 <table class="table">
   <thead class="thead-dark">
     <tr>
       <th scope="col">ID</th>
-      <th scope="col">Produto</th>
-        <th scope="col">Estoque_atual</th>
-        <th scope="col">Estoque_minimo</th>
-
+      <th scope="col">Descrição</th>
+        <th scope="col">Preço</th>
+      <th scope="col">Delete</th>
     </tr>
   </thead>
-{% for produto in produtos %}
+{% for produto in object_list %}
   <tbody>
-    <tr style="text-align: center">
+    <tr>
 
       <td><a href="{% url 'produto_update' produto.id %}">{{ produto.id }}</a></td>
 
       <td><a href="{% url 'produto_update' produto.id %}">{{ produto.descricao|upper }}</a></td>
-
-        <td><a href="{% url 'produto_update' produto.id %}">{{ produto.qted }}</a></td>
-
+        <td><a href="{% url 'produto_update' produto.id %}">{{ produto.preco|upper }}</a></td>
+      <td><a href="{% url 'Produto_Delete' produto.id %}" class="trash-item">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a></td>
          {% empty %}
     <li>Desculpe, nao existem clientes cadastrados</li>
 {% endfor %}
