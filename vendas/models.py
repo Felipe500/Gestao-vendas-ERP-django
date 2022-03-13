@@ -11,7 +11,11 @@ User = get_user_model()
 
 
 
-
+class Descontos_Kits(models.Model):
+    descricao = models.CharField(max_length=25)
+    valor = models.DecimalField(max_digits=6, decimal_places=2)
+    def __str__(self):
+        return str(self.descricao) +' - R$ ' +str(self.valor)
 
 
 class VendaStatus(models.TextChoices):
@@ -37,7 +41,7 @@ class Venda(models.Model):
         (4, ('Cancelado')),
     )
 
-    valor = models.DecimalField(max_digits=5, decimal_places=2,  null=True, blank=True, default=0)
+    valor = models.DecimalField(max_digits=6, decimal_places=2,  null=True, blank=True, default=0)
     desconto = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     impostos = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     cliente = models.ForeignKey(Cliente, null=True, blank=True, on_delete=models.CASCADE)

@@ -2,6 +2,7 @@ from django import forms
 from .models import ItemsVenda, Venda
 from clientes.models import Cliente
 from produtos.models import Produto, Categoria
+from vendas.models import Descontos_Kits
 
 
 class ProdutoCategoriaForm(forms.Form):
@@ -18,17 +19,36 @@ class ItemPedidoForm(forms.Form):
                'name': 'cliente',
              }
     ))
+    desconto = forms.ModelChoiceField(queryset=Descontos_Kits.objects.all(), to_field_name='valor', empty_label=None,
+                                      label='Descontos para kits',
+                                      widget=forms.Select(
+                                          attrs={"class": "select form-control",
+                                                 'name': 'descontos_list',
+                                                 }
+                                      ))
 
     quantidade = forms.IntegerField(label='Quantidade', initial=0)
-    desconto = forms.DecimalField(label='Desconto', max_digits=7, decimal_places=2, initial=0)
 
 
+class DescontoForm(forms.Form):
+    desconto = forms.ModelChoiceField(queryset=Descontos_Kits.objects.all(), to_field_name= 'valor',empty_label=None, label='Descontos para kits',
+                                            widget=forms.Select(
+                                                attrs={"class": "select form-control",
+                                                       'name': 'descontos_list',
+                                                       }
+                                            ))
 
 
 
 
 class ItemForm(forms.ModelForm):
-
+    desconto = forms.ModelChoiceField(queryset=Descontos_Kits.objects.all(), to_field_name='valor', empty_label=None,
+                                      label='Descontos para kits',
+                                      widget=forms.Select(
+                                          attrs={"class": "select form-control",
+                                                 'name': 'descontos_list',
+                                                 }
+                                      ))
     class Meta:
         model = ItemsVenda
         fields = ['quantidade','desconto']

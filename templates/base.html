@@ -43,6 +43,7 @@
                 <spam style="color:white">Olá {{ user.username }}
                 {% if user.is_superuser %}
                  <a href="{% url 'register' %}" class="btn btn-info">Cadastrar Funcionario</a>
+                    <a href="{% url 'register' %}" class="btn btn-info">Cadastrar Funcionario</a>
                     {% endif %}
                 <a href="{% url 'logout' %}" class="btn btn-info">Sair</a></spam>
                  <hr>

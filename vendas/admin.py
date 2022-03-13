@@ -1,8 +1,6 @@
 from django.contrib import admin
-from .models import Venda
-from .models import ItemsVenda
+from .models import Venda, ItemsVenda,Descontos_Kits
 from .actions import nfe_emitida, nfe_nao_emitida
-# Register your models here.
 class ItensVendasInline(admin.TabularInline):
     model = ItemsVenda
     extra = 1
@@ -24,3 +22,4 @@ class VendaAdmin(admin.ModelAdmin):
 
 admin.site.register(Venda,VendaAdmin)
 admin.site.register(ItemsVenda)
+admin.site.register(Descontos_Kits)

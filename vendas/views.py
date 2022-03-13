@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.views import View
 
 from produtos.models import Produto, Estoque
-from .models import Venda, ItemsVenda,  VendaStatus
+from .models import Venda, ItemsVenda,  VendaStatus, Descontos_Kits
 from django.db.models import  Sum, F, FloatField,Min, Max, Avg
 from .forms import VendaForm, ItemPedidoForm,ItemForm, ProdutoAddForm,ProdutoCategoriaForm
 import logging
@@ -38,6 +38,8 @@ class NovoPedido(View):
         data={}
         data_get = {}
 
+
+
         data_get['clientes'] = VendaForm(request.POST, request.FILES)
         data_get['form_produto'] = ProdutoAddForm()
         data_get['ProdutoCategoriaForm'] = ProdutoCategoriaForm()
@@ -60,9 +62,9 @@ class NovoPedido(View):
 
         produtoform = ProdutoAddForm(request.POST)
         if produtoform.is_valid():
-            print("form valido")
+            print("form valido",data['venda_id'])
         else:
-            print("form invalido")
+            print("form invalido",data['venda_id'])
 
         if data['venda_id']:
             print("tem id aqui")
@@ -72,6 +74,7 @@ class NovoPedido(View):
             if vendaform.is_valid():
                 form = vendaform.save(commit=False)
                 print(form.save())
+                vendaform.clean()
 
             itens = venda.itemsvenda_set.all()
             data['venda'] = venda
@@ -126,6 +129,7 @@ class NovoItemPedido(View):
 
             id_produto = int(request.POST['produto_list'])
 
+
             produto_estoque = Estoque.objects.get(produto_id=id_produto)
 
             produto_estoque.alterar_estoque(id_produto, produto_qted)
@@ -171,6 +175,8 @@ class EditPedido(View):
 
         venda = Venda.objects.get(id=venda)
         vendaform = VendaForm(instance=venda or None)
+
+
         data['clientes'] = vendaform
         data['form_produto'] = ProdutoAddForm()
         data['ProdutoCategoriaForm'] = ProdutoCategoriaForm()
@@ -239,6 +245,7 @@ class EditItemPedido(View):
         item_pedido = ItemsVenda.objects.get(id=item)
         val_item = item_pedido.produto.preco
         form = ItemForm(instance=item_pedido)
+
         data_get['form_produto'] = ProdutoAddForm()
         data_get['ProdutoCategoriaForm'] = ProdutoCategoriaForm()
         data_get['item_pedido']: item_pedido

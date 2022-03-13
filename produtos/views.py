@@ -14,6 +14,7 @@ class ProdutosUpdate(LoginRequiredMixin,UpdateView):
 
     def get_object(self, **kwargs):
         print(kwargs)
+        texto = 'Atualizar produto'
         return Produto.objects.get(id=self.kwargs['id'])
 
     def get_form_class(self):
@@ -27,13 +28,13 @@ class ProdutosList(LoginRequiredMixin,ListView):
 def Produto_update(request, id):
     produto_id = get_object_or_404(Produto, pk=id)
     form = ProdutoForm(request.POST or None, request.FILES or None, instance=produto_id)
-
+    texto = 'Atualizar produto'
     if form.is_valid():
         form = form.save(commit=False)
         form.save(using='default')
         return redirect('produto_list')
 
-    return render(request, 'produtos/produto_update.html', {'form': form})
+    return render(request, 'produtos/produto_update.html', {'form': form,'texto':texto})
 
 @login_required
 def Produto_Novo(request):

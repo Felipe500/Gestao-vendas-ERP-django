@@ -1,24 +1,51 @@
 {% extends 'base.html' %}
 {% load bootstrap %}
 
+{% load static %}
+{% load i18n %}
 
-{% block title %} Pagina de login {% endblock %}
 
-{% block main %}
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
 
-    <h2>Login</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form|bootstrap }}
-        <button type="submit" class="btn btn-info">Login</button>
-    </form>
-
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
 {% endblock %}
 
-{% block footer %}
-    <footer class="footer">
-      <div class="container">
-        <span class="text-muted">Desenvolvimento web com Django 2.x</span>
-      </div>
-    </footer>
+{% block main %}
+<div class="body-s">
+	<div class="main">
+
+
+			<div class="signup">
+				<form method="POST" >
+					 {% csrf_token %}
+					<label for="chk" aria-hidden="true">Login</label>
+
+					{{ form.as_p }}
+
+					  {% if redirect_field_value %}
+					  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+					  {% endif %}
+
+					  <button class="primaryAction" type="submit">{% trans "Sign In" %}</button>
+					<ul>
+
+
+
+
+				  </ul>
+
+
+
+
+				</form>
+			</div>
+	</div>
+	</div>
+
+	<div class="login">
+
+
+	</div>
+
 {% endblock %}

@@ -2,11 +2,17 @@
 {% load bootstrap %}
 {% load static %}
 {% block main %}
+{% load my_tags %}
 
 <div class="row">
     <div class="col-12">
+        {% if venda %}
+        <h2>{%cabecalho_2%}</h2>
+        {% else %}
+        <h2>{%cabecalho_1%}</h2>
+        {% endif %}
 
-        <h1>Novo pedido</h1>
+
         <h3 style="font-color:gren">Total: R$ {{ venda.valor }}</h3>
 
         {% if venda.status == 'DC' %}
@@ -42,7 +48,18 @@
             <input type="hidden" value="{{venda.id}}" name="venda_id">
 
             <br>
-            <button type="submit" class="btn btn-primary">Enviar</button>
+            {% if venda %}
+
+            <button type="submit" class="btn btn-primary">
+               {% text_bt_cabecalho2 %}
+            </button>
+                {% else %}
+
+            <button type="submit" class="btn btn-primary">
+                 {% text_bt_cabecalho1 %}
+            </button>
+                {% endif %}
+
 
         </form>
 
@@ -63,9 +80,9 @@
     <form action="{% url 'novo-item-pedido' venda.id %}" method="POST">
         {% csrf_token %}
         {{ form_item|bootstrap }}
-        <button class="btn btn-info">Incluir</button>
+        <button class="btn btn-info">Incluir produto na venda</button>
     </form>
-
+    <br>
     <h2>Listagem de itens</h2>
 
     <table class="table">

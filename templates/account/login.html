@@ -27,13 +27,7 @@
 					  <a class="button secondaryAction" style="text-decoration: none;margin: 20px auto;justify-content: center;display: flex;" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
 					  <button class="primaryAction" type="submit">{% trans "Sign In" %}</button>
 					<ul>
-					 {% if user.is_authenticated %}
-					<li><a href="{% url 'account_email' %}">Change E-mail</a></li>
-					<li><a href="{% url 'account_logout' %}">Sign Out</a></li>
-					{% else %}
 
-					<li style="list-style-type: none;" ><a style="text-decoration: none;justify-content: center;display: flex;margin: 25px auto;" href="{% url 'account_signup' %}">Criar uma conta</a></li>
-					{% endif %}
 
 
 
