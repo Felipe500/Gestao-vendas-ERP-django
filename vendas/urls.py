@@ -2,7 +2,8 @@ from django.urls import path
 from .views import (
     DashboardView, NovoPedido,
     ListaVendas, NovoItemPedido,EditPedido,
-    DeleteItemPedido,DeletePedido,EditItemPedido,filtra_produtos)
+    DeleteItemPedido,DeletePedido,EditItemPedido,
+    filtra_produtos, add_item_ajax)
 
 
 urlpatterns = [
@@ -15,6 +16,7 @@ urlpatterns = [
     path('edit-item-pedido/<int:item>/', EditItemPedido.as_view(), name="edit-item-pedido"),
     path('delete-pedido/<int:venda>/', DeletePedido.as_view(), name="delete-pedido"),
 
+    path('/add_item_list/', add_item_ajax, name='filtra_produtos'),
     path('filtra-produtos/', filtra_produtos, name='filtra_produtos'),
 
 

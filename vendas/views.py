@@ -47,24 +47,13 @@ class NovoPedido(View):
         return render(request, 'vendas/novo-pedido.html',data_get)
 
     def post(self, request):
-
         data = {}
-
-        data['form_item'] = ItemPedidoForm()
-        data['form_produto'] = ProdutoAddForm()
-        data['ProdutoCategoriaForm'] = ProdutoCategoriaForm()
 
         vendaform = VendaForm(request.POST or None)
 
         data['cliente']= request.POST['cliente']
         data['venda_id'] = request.POST['venda_id']
-        data['clientes'] = vendaform
 
-        produtoform = ProdutoAddForm(request.POST)
-        if produtoform.is_valid():
-            print("form valido",data['venda_id'])
-        else:
-            print("form invalido",data['venda_id'])
 
         if data['venda_id']:
             print("tem id aqui")
@@ -72,31 +61,35 @@ class NovoPedido(View):
             vendaform = VendaForm(request.POST or None, instance=venda)
 
             if vendaform.is_valid():
-                form = vendaform.save(commit=False)
-                print(form.save())
+                venda = vendaform.save(commit=False)
+                print(venda.save())
                 vendaform.clean()
-
-            itens = venda.itemsvenda_set.all()
-            data['venda'] = venda
-            data['itens'] = itens
+                return redirect('edit-pedido', venda=venda.pk)
 
         else:
-            print("não tem id aqui")
-
             if vendaform.is_valid():
 
                 print(vendaform.cleaned_data.get('cliente_id'))
-                form = vendaform.save(commit=False)
-                form.vendedor = request.user
-                form.save()
-                print('venda ',form.pk,' criada com sucesso!')
-                venda = Venda.objects.get(id=form.pk)
-                itens = venda.itemsvenda_set.all()
-                data['venda'] = venda
-                data['itens'] = itens
+                venda = vendaform.save(commit=False)
+                venda.vendedor = request.user
+                venda.save()
+                print('venda ',venda.pk,' criada com sucesso!')
 
-        return render(
-            request, 'vendas/novo-pedido.html', data)
+                return redirect('edit-pedido', venda=venda.pk)
+
+
+
+def add_item_ajax(request):
+    venda_id = request.GET['venda_id']
+
+    item = ItemsVenda.objects.create(
+        produto_id=request.POST['produto_list'], quantidade=request.POST['quantidade'],
+        desconto=request.POST['desconto'], venda_id=venda_id)
+
+
+    qs_json = serializers.serialize('json', ItemsVenda.objects.filter(venda=venda_id))
+    return HttpResponse(qs_json, content_type='application/json')
+
 
 class NovoItemPedido(View):
     def get(self, request, pk):

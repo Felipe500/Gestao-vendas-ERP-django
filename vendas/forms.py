@@ -6,10 +6,11 @@ from vendas.models import Descontos_Kits
 
 
 class ProdutoCategoriaForm(forms.Form):
-    categoria_list = forms.ModelChoiceField(queryset=Categoria.objects.all(),empty_label=None, label='CATEGORIA', widget=forms.Select(
+    categoria_list = forms.ModelChoiceField(queryset=Categoria.objects.all(),empty_label=None,
+        label='CATEGORIA', widget=forms.Select(
         attrs={"class": "select form-control",
                'name': 'produto_list',
-               'onchange': "filtraFuncionarios(this.value)"}
+               'onchange': "filtra_produtos(this.value)"}
     ))
 
 class ItemPedidoForm(forms.Form):
@@ -19,7 +20,8 @@ class ItemPedidoForm(forms.Form):
                'name': 'cliente',
              }
     ))
-    desconto = forms.ModelChoiceField(queryset=Descontos_Kits.objects.all(), to_field_name='valor', empty_label=None,
+    desconto = forms.ModelChoiceField(queryset=Descontos_Kits.objects.all(), to_field_name='valor',
+                                      empty_label=None,
                                       label='Descontos para kits',
                                       widget=forms.Select(
                                           attrs={"class": "select form-control",

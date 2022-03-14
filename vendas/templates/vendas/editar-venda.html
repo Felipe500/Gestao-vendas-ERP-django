@@ -80,11 +80,10 @@
     <form action="{% url 'novo-item-pedido' venda.id %}" method="POST">
         {% csrf_token %}
         {{ form_item|bootstrap }}
-         <button class="btn btn-info" >Incluir produto na venda</button>
+        <button class="btn btn-info" >Incluir produto na venda</button>
     </form>
-
-
-
+    <button class="btn btn-info" onclick="alerta2">Incluir produto na venda 6</button>
+    <button class="btn btn-info" onclick="alerta2">Incluir produto na venda 6</button>
     <br>
     <h2>Listagem de itens</h2>
 
