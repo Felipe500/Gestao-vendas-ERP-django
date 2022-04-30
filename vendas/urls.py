@@ -16,8 +16,8 @@ urlpatterns = [
     path('edit-item-pedido/<int:item>/', EditItemPedido.as_view(), name="edit-item-pedido"),
     path('delete-pedido/<int:venda>/', DeletePedido.as_view(), name="delete-pedido"),
 
-    path('/add_item_list/', add_item_ajax, name='filtra_produtos'),
-    path('filtra-produtos/', filtra_produtos, name='filtra_produtos'),
+    path('add_item_list', add_item_ajax, name='add_item_list'),
+    path('/filtra-produtos/', filtra_produtos, name='filtra_produtos'),
 
 
 ]

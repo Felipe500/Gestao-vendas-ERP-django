@@ -77,22 +77,23 @@
 
     {{ProdutoCategoriaForm}}
 
-    <form action="{% url 'novo-item-pedido' venda.id %}" method="POST">
+
+  <form  method="POST">
         {% csrf_token %}
         {{ form_item|bootstrap }}
-         <button class="btn btn-info" >Incluir produto na venda</button>
+         <button class="btn btn-info" onclick="add_item_venda({{ venda.id }})" type="button">Incluir produto na venda 2</button>
     </form>
-
-
 
     <br>
     <h2>Listagem de itens</h2>
 
-    <table class="table">
+    <div  style="overflow-x:auto;">
+    <table class="table" id="table_produto">
       <thead>
         <tr>
           <th scope="col">ID</th>
           <th scope="col">Descricao</th>
+          <th scope="col">valor</th>
           <th scope="col">Quantidade</th>
           <th scope="col">Desconto</th>
             <th scope="col">Editar</th>
@@ -104,6 +105,7 @@
             <tr>
                 <td>{{ item.id }}</td>
                 <td>{{ item.produto.descricao }}</td>
+                <td>{{ item.produto.preco }}</td>
                 <td>{{ item.quantidade }}</td>
                 <td>{{ item.desconto }}</td>
                 <th scope="col">
@@ -115,7 +117,7 @@
             </tr>
         {% endfor %}
       </tbody>
-    </table>
+    </table></div>
 {% endif %}
 {% endblock %}
 

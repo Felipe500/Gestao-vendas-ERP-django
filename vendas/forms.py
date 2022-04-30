@@ -26,7 +26,7 @@ class ItemPedidoForm(forms.Form):
                                       widget=forms.Select(
                                           attrs={"class": "select form-control",
                                                  'name': 'descontos_list',
-                                                 }
+                                                 'id':  'desconto_produto'}
                                       ))
 
     quantidade = forms.IntegerField(label='Quantidade', initial=0)
@@ -44,12 +44,12 @@ class DescontoForm(forms.Form):
 
 
 class ItemForm(forms.ModelForm):
-    desconto = forms.ModelChoiceField(queryset=Descontos_Kits.objects.all(), to_field_name='valor', empty_label=None,
+    desconto = forms.ModelChoiceField(queryset=Descontos_Kits.objects.all(),
+                                      to_field_name='valor', empty_label=None,
                                       label='Descontos para kits',
                                       widget=forms.Select(
                                           attrs={"class": "select form-control",
-                                                 'name': 'descontos_list',
-                                                 }
+                                                 'name': 'descontos_list'}
                                       ))
     class Meta:
         model = ItemsVenda
@@ -58,7 +58,7 @@ class ItemForm(forms.ModelForm):
         widgets = {
 
             'quantidade': forms.NumberInput(attrs={"class": "form-control", 'name': 'cliente'}),
-            'desconto': forms.NumberInput(attrs={"class": "form-control", 'name': 'desconto'})
+            'desconto': forms.NumberInput(attrs={"class": "form-control", 'name': 'desconto', 'id':  'desconto_produto'})
         }
 
 

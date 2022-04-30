@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'autenticacao',
 
     'funcionarios.apps.FuncionariosConfig',
+    'configuracoes',
     'clientes',
     'produtos',
     'vendas',

@@ -8,7 +8,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     <link rel="stylesheet" href="{% static 'bootstrap-4.6.1/dist/css/bootstrap.min.css' %} ">
+    <link rel="stylesheet" href=" {% static 'fontawesome-free-5.15.4-web/css/fontawesome.min.css' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/w3.css' %}">
+  <link rel="stylesheet" href="{% static 'css/w3-theme-blue-grey.css' %}">
     <link rel="stylesheet" href="{% static 'stick-footer.css' %}">
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <title>{% block title %}{% endblock %}</title>
@@ -16,7 +20,7 @@
 
     {% endblock %}
 </head>
-<body>
+<body  class="w3-theme-l5">
 
 
 
@@ -42,7 +46,7 @@
                     {% if user.is_authenticated %}
                 <spam style="color:white">Olá {{ user.username }}
                 {% if user.is_superuser %}
-                 <a href="{% url 'register' %}" class="btn btn-info">Cadastrar Funcionario</a>
+                 <a href="{% url 'settings_app' %}" style="color: #fff;">Configurações</a>
                     <a href="{% url 'register' %}" class="btn btn-info">Cadastrar Funcionario</a>
                     {% endif %}
                 <a href="{% url 'logout' %}" class="btn btn-info">Sair</a></spam>
@@ -58,16 +62,16 @@
 
 
         </nav>
-        <hr>
+
         {% block extranavbar %}
         {% endblock %}
 
 
-        <div class="container-lg">
+
             {% block main %}
             {% endblock %}
 
-        </div>
+
 
         {% block extra %}
         {% endblock %}

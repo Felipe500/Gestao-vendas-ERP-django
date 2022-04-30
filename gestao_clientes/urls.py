@@ -5,6 +5,7 @@ from clientes import urls as clientes_urls
 from produtos import urls as produtos_urls
 from vendas import urls as vendas_urls
 from home import urls as home_urls
+from configuracoes import urls as settings_urls
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
@@ -12,6 +13,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', include(home_urls)),
+    path('', include(settings_urls)),
     path('clientes/', include(clientes_urls)),
     path('produtos/', include(produtos_urls)),
     path('vendas/', include(vendas_urls)),

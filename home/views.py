@@ -94,8 +94,8 @@ class SignupView(
 signup = SignupView.as_view()
 
 def filtra_produtos(request):
-    id_categoria = request.GET['outro_param']
-    print( request.GET['outro_param'] ,'ddd')
+    id_categoria = request.POST['categoria_id']
+    print( request.POST['categoria_id'] ,'ddd')
 
     categoria = Categoria.objects.get(id=id_categoria)
 
