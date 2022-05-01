@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% load static %}
+{% block extra_head %}
+
+{% endblock %}
+
+{% block main %}
+
+ <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+      <h4 align="center"><b>Resumo da Movimentações</b></h4><br>
+         <div class="row">
+<div class="col-sm-4">
+  <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
+  <div class="card-header" align="center"><H3>ENTRADAS</H3> </div>
+  <div class="card-body">
+    <h5 class="card-title" align="center">R$ 00,00</h5>
+     </div>
+  </div></div>
+
+  <div class="col-sm-4">
+  <div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
+  <div class="card-header" align="center"><H3>SAIDAS</H3> </div>
+  <div class="card-body">
+    <h5 class="card-title" align="center">R$ 00,00</h5>
+     </div>
+  </div></div>
+
+  <div class="col-sm-4">
+  <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+  <div class="card-header" align="center"><H3>TOTAL</H3> </div>
+  <div class="card-body">
+    <h5 class="card-title" align="center">R$ 00,00</h5>
+     </div>
+  </div></div>
+
+</div>
+
+        <div class="w3-responsive">
+        <table class="w3-table-all">
+        <tr>
+          <th>TIPO</th>
+          <th>MOVIMENTO</th>
+          <th>USER</th>
+          <th>DATA</th>
+          <th>CARTAO</th>
+          <th>ESPECIE</th>
+          <th>PIX</th>
+          <th>DEPOSITO</th>
+          <th>TOTAL</th>
+        </tr>
+        <tr>
+          <td>ENTRADA</td>
+          <td>VENDA</td>
+          <td>JOANA</td>
+          <td>20/03/2022</td>
+          <td>120,00</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>120</td>
+        </tr>
+        <tr>
+          <td>ENTRADA</td>
+          <td>VENDA</td>
+          <td>FELIPE</td>
+          <td>20/03/2022</td>
+          <td>69,90</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>69,90</td>
+        </tr>
+        <tr>
+          <td>SAIDA</td>
+          <td>PERDA NO ESTOQUE</td>
+          <td>FELIPE</td>
+          <td>20/03/2022</td>
+          <td>69,90</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>69,90</td>
+        </tr>
+        </table>
+        </div>
+
+
+        </div>
+
+      <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+         <h4 align="center">Minhas Entradas</h4><br>
+        <div class="row">
+<div class="col-sm-4">
+  <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+  <div class="card-header" align="center"><H3>CARTÃO</H3> </div>
+  <div class="card-body">
+    <h5 class="card-title" align="center">R$ 00,00</h5>
+     </div>
+  </div></div>
+
+  <div class="col-sm-4">
+  <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+  <div class="card-header" align="center"><H3>PIX</H3> </div>
+  <div class="card-body">
+    <h5 class="card-title" align="center">R$ 00,00</h5>
+     </div>
+  </div></div>
+
+  <div class="col-sm-4">
+  <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+  <div class="card-header" align="center"><H3>ESPECIE</H3> </div>
+  <div class="card-body">
+    <h5 class="card-title" align="center">R$ 00,00</h5>
+     </div>
+  </div></div>
+
+</div>
+
+         </div>
+
+
+
+    <!-- End Middle Column -->
+    </div>
+
+    <!-- Right Column -->
+
+
+
+
+
+
+
+    <!-- End Right Column -->
+    </div>
+
+  <!-- End Grid -->
+  </div>
+
+<script>
+// Accordion
+function myFunction(id) {
+  var x = document.getElementById(id);
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+    x.previousElementSibling.className += " w3-theme-d1";
+  } else {
+    x.className = x.className.replace("w3-show", "");
+    x.previousElementSibling.className =
+    x.previousElementSibling.className.replace(" w3-theme-d1", "");
+  }
+}
+
+// Used to toggle the menu on smaller screens when clicking on the menu button
+function openNav() {
+  var x = document.getElementById("navDemo");
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+  } else {
+    x.className = x.className.replace(" w3-show", "");
+  }
+}
+</script>
+
+{% endblock %}
+
+{% block staticfiles %}
+
+
+    <script src="{% static 'js/config.js' %}"></script>
+{% endblock %}
