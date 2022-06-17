@@ -14,6 +14,7 @@ from django.db.models import Sum, F, FloatField, Min, Max, Avg
 from .forms import VendaForm, ItemPedidoForm, ItemForm, ProdutoAddForm, ProdutoCategoriaForm
 import logging
 from produtos.models import Categoria, Produto
+from django.views.generic.base import TemplateView
 
 my_log = logging.getLogger('django')
 
@@ -30,6 +31,51 @@ class DashboardView(LoginRequiredMixin, View):
         data['n_ped_nfe'] = Venda.objects.num_ped_nefe()
 
         return render(request, 'vendas/dashboard.html', data)
+
+class PagamentoView(LoginRequiredMixin, TemplateView):
+    template_name = "vendas/pagamento.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(PagamentoView, self).get_context_data(**kwargs)
+
+        return context
+
+class PagamentoView2(LoginRequiredMixin, TemplateView):
+    template_name = "vendas/pagamento2.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(PagamentoView2, self).get_context_data(**kwargs)
+        print(self.kwargs.get('venda'))
+
+        venda = Venda.objects.get(id=self.kwargs.get('venda'))
+
+
+        total_venda = venda.itemsvenda_set.all().aggregate(
+            total_venda =Sum((F('quantidade') * F('produto__preco')) - F('desconto'), output_field=FloatField())
+        )['total_venda'] or 0
+        total_venda = total_venda - float(venda.impostos) - float(venda.desconto)
+
+        # context = ClienteForm(instance=cliente OR None)
+        context['form_item'] = ItemPedidoForm()
+
+        context['desconto'] = float(venda.desconto)
+        context['venda'] = venda
+        print(venda.id)
+        context['itens'] = venda.itemsvenda_set.all().annotate(
+            total_item=Sum((F('quantidade') * F('produto__preco')) - F('desconto'), output_field=FloatField())
+        )
+        context['subtotal'] = venda.itemsvenda_set.all().aggregate(
+            subtotal=Sum((F('quantidade') * F('produto__preco')) , output_field=FloatField())
+        )['subtotal'] or 0
+
+        context['total_desconto'] = (venda.itemsvenda_set.all().aggregate(
+            total_desconto=Sum(( F('desconto')), output_field=FloatField())
+        )['total_desconto'] or 0) + float(venda.desconto)
+
+        context['total_venda'] = total_venda
+
+        return context
+
 
 
 class NovoPedido(View):
@@ -324,8 +370,8 @@ class EditItemPedido(View):
 
 
 def filtra_produtos(request):
-    id_categoria = request.GET['outro_param']
-    print( request.GET['outro_param'] ,'ddd')
+    id_categoria = request.POST.get['outro_param']
+    print( request.POST.get['outro_param'] ,'ddd')
 
     categoria = Categoria.objects.get(id=id_categoria)
 

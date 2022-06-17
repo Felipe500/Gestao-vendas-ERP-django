@@ -1,16 +1,22 @@
 from model_utils import Choices
 
-STATUS_CONTENT = Choices(
-    ('0', 'saida'),
-    ('1', 'entrada')
+
+ESPECIE = '0'
+CARTAO = '1'
+PIX = '2'
+DEPOSITO = '3'
+
+SAIDA = '0'
+ENTRADA = '1'
+
+STATUS_VENDA = Choices(
+    (SAIDA, 'saida'),
+    (ENTRADA, 'entrada')
+)
+FORMA_PG = Choices(
+    (ESPECIE, 'ESPECIE'),
+    (CARTAO, 'CARTAO'),
+    (PIX, 'PIX'),
+    (DEPOSITO, 'DEPOSITO'),
 )
 
-STATUS_Venda = Choices(
-    ('0', 'saida'),
-    ('1', 'entrada')
-)
-
-ABERTA = 'AB', 'Aberta'
-FECHADA = 'FE', 'Fechada'
-PROCESSANDO = 'PR', 'Processando'
-DESCONHECIDO = 'DC', 'Desconhecido'

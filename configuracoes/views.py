@@ -67,11 +67,4 @@ def Settings2(request):
     data['usuario'] = request.user
     return  render( request, "configuracoes/settings2.html",data)
 
-def Cadastrar_Maq_Cartao(request):
-    id_categoria = request.GET['outro_param']
-    print(request.GET['outro_param'], 'ddd')
 
-    categoria = Categoria.objects.get(id=id_categoria)
-
-    qs_json = serializers.serialize('json', categoria.produto_set.all())
-    return HttpResponse(qs_json, content_type='application/json')

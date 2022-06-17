@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{% static 'css/w3.css' %}">
   <link rel="stylesheet" href="{% static 'css/w3-theme-blue-grey.css' %}">
     <link rel="stylesheet" href="{% static 'stick-footer.css' %}">
-    <link rel="stylesheet" href="{% static 'style.css' %}">
+
     <title>{% block title %}{% endblock %}</title>
     {% block extra_head %}
 
@@ -37,6 +37,7 @@
                   <a class="nav-link" style="color: white;" href="{% url 'person_list' %}">Clientes</a>
                     <a class="nav-link" style="color: white;" href="{% url 'estoque_produtos' %}">Estoque</a>
                   <a class="nav-link" style="color: white;" href="{% url 'lista-vendas' %}">Vendas</a>
+                    <a class="nav-link" style="color: white;" href="{% url 'movimentacoes' %}">Minhas Movimentações</a>
 
 
 
@@ -47,7 +48,7 @@
                 <spam style="color:white">Olá {{ user.username }}
                 {% if user.is_superuser %}
                  <a href="{% url 'settings_app' %}" style="color: #fff;">Configurações</a>
-                    <a href="{% url 'register' %}" class="btn btn-info">Cadastrar Funcionario</a>
+
                     {% endif %}
                 <a href="{% url 'logout' %}" class="btn btn-info">Sair</a></spam>
                  <hr>

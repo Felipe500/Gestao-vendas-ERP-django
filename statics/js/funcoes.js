@@ -89,7 +89,6 @@ function add_item_venda(id_venda){
 
         },
         success: function(result){
-            alert('ok');
             response_add_item_venda(result);
             $("#mensagem").text('produto incluido com sucesso');
         }
@@ -140,7 +139,7 @@ function filtra_produtos(value){
         type: 'GET',
         url: '/filtra_produtos/',
         data: {
-            outro_param: categoria_id
+            categoria_id: categoria_id
         },
         success: function(result){
             process_response(result);
